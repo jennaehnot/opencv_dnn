@@ -1,5 +1,5 @@
 <launch>
-  <arg name="model" default="$(find opencv_dnn)/config/model2_2.onnx"/>
+  <arg name="model" default="$(find opencv_dnn)/config/model_GIT.onnx"/>
   <arg name="threshold" default="0.3"/>
   <arg name="image_topic" default="image_raw"/>
 
