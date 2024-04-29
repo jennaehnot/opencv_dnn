@@ -48,7 +48,7 @@ private:
 
   float obj_threshold_ = 0.2;
   float nms_threshold_ = 0.4;
-  float conf_threshold_ = 0.4;
+  float conf_threshold_ = 0.2;
 
   ros::Publisher detections_publisher_;
 
