@@ -11,6 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   vision_msgs
 )
+# testing to enable CUDA
+find_package(CUDA REQUIRED)
 
 find_package(OpenCV 4.5 REQUIRED )
 find_package(Protobuf REQUIRED)
@@ -19,7 +21,7 @@ catkin_package(
   INCLUDE_DIRS include
   LIBRARIES opencv_dnn_plugins
   CATKIN_DEPENDS  roscpp cv_bridge protobuf-dev vision_msgs image_transport
-#  DEPENDS system_lib
+  DEPENDS system_lib
 )
 
 include_directories(
@@ -28,6 +30,7 @@ include_directories(
   ${OpenCV_INCLUDE_DIRS}
   ${PROTOBUF_INCLUDE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
+  # ${CUDA_INCLUDE_DIRS}
 )
 
 PROTOBUF_GENERATE_CPP(PROTO_SRC PROTO_HEADER src/onnx/onnx.proto)
