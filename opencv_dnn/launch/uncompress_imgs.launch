@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="bag_file"/>
+  <arg name="new_bag"/>
+  <arg name="start_time" default="0"/>
+  <arg name="topic_in" default="/image_raw"/>
+  <arg name="topic_out" default="/image_raw"/>
+
+  <!-- Play recorded bag-->
+  <node pkg="rosbag" type="play" name="bagplay" args="--start=$(arg start_time) $(arg bag_file)">
+  </node>
+
+  <!-- Record new bag-->
+  <node name="record" pkg="rosbag" type="record" args="-a -O $(arg new_bag)"/>
+
+  <!-- Republish compressed as uncompressed -->
+  <node pkg="image_transport" type="republish" name="republish" args="compressed in:=$(arg topic_in) raw out:=$(arg topic_out)"/>
+
+</launch>
