@@ -221,7 +221,7 @@ void Node::imageCallback(const sensor_msgs::ImageConstPtr& msg)
   context.network_input_height = net_input_height_;
 
   vision_msgs::Detection2DArray detections_msg = detections_parser_->parse(detections, context);
-
+  detections_msg.header = msg->header; //add time of photo to detection msg
   auto total_end = std::chrono::steady_clock::now();
   detections_publisher_.publish(detections_msg);
   TimeData td;
