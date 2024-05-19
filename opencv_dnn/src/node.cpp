@@ -32,20 +32,21 @@ Node::Node()
   pnh.param("model_path", model_path, std::string(""));
   if(!model_path.empty())
     model = model_path + "/" + model;
-        
+    
   std::string configuration, configuration_path;
   pnh.param("configuration", configuration, std::string());
   pnh.param("configuration_path", configuration_path, std::string(""));
   if(!configuration.empty() && !configuration_path.empty())
     configuration = configuration_path + "/" + configuration;
+    ROS_INFO_STREAM("Config: " << configuration);
+    
+  ROS_INFO_STREAM("Model: " << model);
+  ROS_INFO_STREAM("Objectness Threshold: " << obj_threshold_ << " NMS Threshold: " << nms_threshold_ << " Confidence Threshold: " << conf_threshold_);
 
-  ROS_INFO_STREAM("model: " << model);
-  ROS_INFO_STREAM("config: " << configuration);
-  ROS_INFO_STREAM("objectness threshold: " << obj_threshold_ << " nms threshold: " << nms_threshold_ << " confidence threshold" << conf_threshold_);
-  ROS_INFO_STREAM(" parser: " << detections_parser_type_);
+  ROS_INFO_STREAM("Parser: " << detections_parser_type_);
 
   GOOGLE_PROTOBUF_VERIFY_VERSION;
-
+  
   if(model.rfind(".onnx") == model.size()-5)
   {
     ROS_INFO_STREAM("Looking for class labels in .onnx file");
@@ -171,7 +172,7 @@ Node::Node()
 
 
   detections_publisher_ = pnh.advertise<vision_msgs::Detection2DArray>("detections", 1, 0);
-        
+      
   ros::NodeHandle nh; // non-private node handle        
 
   image_transport_ = std::shared_ptr<image_transport::ImageTransport>(new image_transport::ImageTransport(nh));
@@ -180,7 +181,9 @@ Node::Node()
 
   class_labels_timer_ = pnh.createTimer(ros::Duration(2.0), &Node::sendClassesTimerCallback, this);   
 
-  detection_image_publisher_ = image_transport_->advertise("detection_image", 1);
+  //detection_image_publisher_ = image_transport_->advertise("detection_image", 1);
+  detection_image_publisher_ = nh.advertise<sensor_msgs::Image>("detection_image", 1);
+
 }
 
 void Node::sendClassesTimerCallback(const ros::TimerEvent& event)

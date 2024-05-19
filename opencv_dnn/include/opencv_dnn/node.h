@@ -41,7 +41,6 @@ private:
   int net_input_height_ = 0;
   std::vector<std::string> net_output_names_;
 
-
   std::string detections_parser_type_ = "opencv_dnn::YOLOv8Parser";
   boost::shared_ptr<opencv_dnn::DetectionsParser> detections_parser_;
   pluginlib::ClassLoader<opencv_dnn::DetectionsParser> parser_loader_;
@@ -55,7 +54,7 @@ private:
   std::shared_ptr<image_transport::ImageTransport> image_transport_;
   image_transport::Subscriber image_subscriber_;
 
-  image_transport::Publisher detection_image_publisher_;
+  ros::Publisher detection_image_publisher_;
 
   std::map<int,std::string> class_labels_;
   std_msgs::String class_labels_yaml_;
