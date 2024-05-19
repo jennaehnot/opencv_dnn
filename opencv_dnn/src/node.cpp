@@ -42,7 +42,6 @@ Node::Node()
     
   ROS_INFO_STREAM("Model: " << model);
   ROS_INFO_STREAM("Objectness Threshold: " << obj_threshold_ << " NMS Threshold: " << nms_threshold_ << " Confidence Threshold: " << conf_threshold_);
-
   ROS_INFO_STREAM("Parser: " << detections_parser_type_);
 
   GOOGLE_PROTOBUF_VERIFY_VERSION;

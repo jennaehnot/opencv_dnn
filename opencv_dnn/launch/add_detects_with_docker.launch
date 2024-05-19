@@ -1,0 +1,14 @@
+ 
+<launch>
+  <arg name="bag_file"/>
+  <arg name="new_bag"/>
+  <arg name="start_time" default="0"/>
+
+  <!-- Play recorded bag-->
+  <node pkg="rosbag" type="play" name="bagplay" args="--start=$(arg start_time) $(arg bag_file)">
+  </node>
+
+  <!-- Record new bag-->
+  <node name="record" pkg="rosbag" type="record" args="-a -O /home/jenna/new_bags/$(arg new_bag)"/>
+
+</launch>
