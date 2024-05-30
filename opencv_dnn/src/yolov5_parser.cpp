@@ -36,6 +36,7 @@ vision_msgs::Detection2DArray YOLOv5Parser::parse(const std::vector<cv::Mat> &de
       //initialize max class val and id for this row of detections
       float max_class_val = 0;
       int max_class_id; 
+      float yolo_score = 0;
       auto objectness = detection.at<float>(i,j,4);
 
       if(objectness >= context.obj_threshold) //if objectness meets requirements
@@ -55,10 +56,11 @@ vision_msgs::Detection2DArray YOLOv5Parser::parse(const std::vector<cv::Mat> &de
           {
             max_class_id=class_id;
             max_class_val=confidence;
+            yolo_score = confidence * objectness;
           }
         }
         boxes[max_class_id].push_back(rect);
-        scores[max_class_id].push_back(max_class_val);
+        scores[max_class_id].push_back(yolo_score);
       }
     }
   }
@@ -66,7 +68,7 @@ vision_msgs::Detection2DArray YOLOv5Parser::parse(const std::vector<cv::Mat> &de
   //non-maximum suppression to suppress multiple detections of one object
   std::vector<std::vector<int> > indices(class_count);
   for (int c = 0; c < class_count; c++)
-    cv::dnn::NMSBoxes(boxes[c], scores[c], 0.0, context.nms_threshold, indices[c]);
+    cv::dnn::NMSBoxes(boxes[c], scores[c], context.conf_threshold, context.nms_threshold, indices[c]);
 
   vision_msgs::Detection2DArray detections_msg;
   //print boxes
